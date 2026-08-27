@@ -56,7 +56,7 @@
     #scoreBar {
       display: flex;
       justify-content: space-between;
-      max-width: 340px;
+      max-width: 460px;
       margin: 14px auto 8px;
       font-weight: bold;
       font-size: clamp(0.95rem, 3.6vw, 1.2rem);
@@ -65,7 +65,7 @@
 
     #tableWrap {
       position: relative;
-      max-width: 340px;
+      max-width: 460px;
       margin: 0 auto;
     }
     #table {
@@ -138,7 +138,7 @@
   </div>
 
   <div id="tableWrap">
-    <canvas id="table" width="340" height="520"></canvas>
+    <canvas id="table" width="460" height="700"></canvas>
     <div id="overlayMsg">
       <div class="big" id="overlayBig"></div>
       <div class="small" id="overlaySmall"></div>
@@ -151,24 +151,24 @@
   </div>
 
   <script>
-    var TABLE_W = 340, TABLE_H = 520;
+    var TABLE_W = 460, TABLE_H = 700;
     var CENTER_Y = TABLE_H / 2;
-    var PADDLE_R = 24, PUCK_R = 13;
-    var GOAL_HALF_W = 62;
-    var CPU_DEFENSE_Y = PADDLE_R + 44;
-    var MAX_PUCK_SPEED = 15;
+    var PADDLE_R = 32, PUCK_R = 18;
+    var GOAL_HALF_W = 84;
+    var CPU_DEFENSE_Y = PADDLE_R + 60;
+    var MAX_PUCK_SPEED = 20;
 
     var DIFFICULTY = {
-      easy:   { aiSpeed: 3.0, aiError: 42, serveSpeed: 3.2, label: "😊 Easy" },
-      medium: { aiSpeed: 4.6, aiError: 18, serveSpeed: 4.6, label: "🙂 Medium" },
-      hard:   { aiSpeed: 6.6, aiError: 5,  serveSpeed: 6.2, label: "😤 Hard" }
+      easy:   { aiSpeed: 4.0, aiError: 57, serveSpeed: 4.3, label: "😊 Easy" },
+      medium: { aiSpeed: 6.2, aiError: 24, serveSpeed: 6.2, label: "🙂 Medium" },
+      hard:   { aiSpeed: 8.9, aiError: 7,  serveSpeed: 8.4, label: "😤 Hard" }
     };
 
     var canvas = document.getElementById("table");
     var ctx = canvas.getContext("2d");
 
-    var player = { x: TABLE_W / 2, y: TABLE_H - 70, vx: 0, vy: 0, targetX: TABLE_W / 2, targetY: TABLE_H - 70, dragging: false };
-    var cpu = { x: TABLE_W / 2, y: 70, vx: 0, vy: 0, jitterX: 0 };
+    var player = { x: TABLE_W / 2, y: TABLE_H - 95, vx: 0, vy: 0, targetX: TABLE_W / 2, targetY: TABLE_H - 95, dragging: false };
+    var cpu = { x: TABLE_W / 2, y: 95, vx: 0, vy: 0, jitterX: 0 };
     var puck = { x: TABLE_W / 2, y: CENTER_Y, vx: 0, vy: 0 };
 
     var currentDiff = null;
@@ -200,9 +200,9 @@
     }
 
     function resetPaddles() {
-      player.x = TABLE_W / 2; player.y = TABLE_H - 70; player.vx = 0; player.vy = 0;
+      player.x = TABLE_W / 2; player.y = TABLE_H - 95; player.vx = 0; player.vy = 0;
       player.targetX = player.x; player.targetY = player.y;
-      cpu.x = TABLE_W / 2; cpu.y = 70; cpu.vx = 0; cpu.vy = 0;
+      cpu.x = TABLE_W / 2; cpu.y = 95; cpu.vx = 0; cpu.vy = 0;
     }
 
     function servePuck() {
@@ -366,7 +366,7 @@
 
       // center circle
       ctx.beginPath();
-      ctx.arc(TABLE_W / 2, CENTER_Y, 44, 0, Math.PI * 2);
+      ctx.arc(TABLE_W / 2, CENTER_Y, 60, 0, Math.PI * 2);
       ctx.strokeStyle = "rgba(106,44,255,0.35)";
       ctx.lineWidth = 3;
       ctx.stroke();
