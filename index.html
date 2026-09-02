@@ -167,7 +167,7 @@
     var canvas = document.getElementById("table");
     var ctx = canvas.getContext("2d");
 
-    var player = { x: TABLE_W / 2, y: TABLE_H - 95, vx: 0, vy: 0, targetX: TABLE_W / 2, targetY: TABLE_H - 95, dragging: false };
+    var player = { x: TABLE_W / 2, y: TABLE_H - 95, vx: 0, vy: 0, targetX: TABLE_W / 2, targetY: TABLE_H - 95 };
     var cpu = { x: TABLE_W / 2, y: 95, vx: 0, vy: 0, jitterX: 0 };
     var puck = { x: TABLE_W / 2, y: CENTER_Y, vx: 0, vy: 0 };
 
@@ -240,6 +240,7 @@
           endMatch();
         } else {
           hideOverlay();
+          resetPaddles();
           servePuck();
           state = "playing";
         }
@@ -263,10 +264,16 @@
 
       // AI paddle
       var diff = DIFFICULTY[currentDiff];
-      var targetX = puck.x;
-      var targetY = CPU_DEFENSE_Y;
+      var targetX, targetY;
       if (puck.y < CENTER_Y * 0.9) {
+        // puck is on the AI's side: track it closely to defend/attack
+        targetX = puck.x;
         targetY = Math.min(puck.y, CENTER_Y - PADDLE_R);
+      } else {
+        // puck is on the player's side: guard the middle instead of
+        // camping in a corner wherever the puck happens to be parked
+        targetX = TABLE_W / 2 + (puck.x - TABLE_W / 2) * 0.3;
+        targetY = CPU_DEFENSE_Y;
       }
       cpu.jitterFrames = (cpu.jitterFrames || 0) - 1;
       if (cpu.jitterFrames <= 0) {
@@ -428,14 +435,11 @@
     }
 
     canvas.addEventListener("pointerdown", function (e) {
-      player.dragging = true;
       setPlayerTarget(canvasPoint(e));
     });
     canvas.addEventListener("pointermove", function (e) {
-      if (!player.dragging) return;
       setPlayerTarget(canvasPoint(e));
     });
-    window.addEventListener("pointerup", function () { player.dragging = false; });
 
     document.querySelectorAll("#difficultyRow .chip").forEach(function (btn) {
       btn.addEventListener("click", function () { startMatch(btn.getAttribute("data-diff")); });
